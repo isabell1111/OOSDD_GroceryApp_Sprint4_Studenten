@@ -35,5 +35,15 @@ namespace Grocery.App.ViewModels
             base.OnDisappearing();
             GroceryLists.Clear();
         }
+        private async void ShowBoughtProducts()
+        {
+            // Check of de client de Admin rol heeft
+            if (Client?.Role == Role.Admin)
+            {
+                // Navigeer naar BoughtProductsView
+                await Shell.Current.GoToAsync(nameof(BoughtProductsView));
+            }
+            // Anders doen we niets (geen navigatie)
+        }
     }
 }
