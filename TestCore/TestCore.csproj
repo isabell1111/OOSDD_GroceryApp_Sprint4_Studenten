@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Test framework -->
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <PrivateAssets>all</PrivateAssets>
@@ -14,10 +13,4 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- Verwijzing naar je hoofdproject -->
-    <ProjectReference Include="..\OOSDD_GroceryApp_Sprint4_Studenten\OOSDD_GroceryApp_Sprint4_Studenten.csproj" />
-  </ItemGroup>
-
 </Project>
-
