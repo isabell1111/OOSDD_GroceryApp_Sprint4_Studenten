@@ -1,28 +1,35 @@
-<Project Sdk="Microsoft.NET.Sdk">
+name: MAUI Unit Tests
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+on:
+  push:
+    branches:
+      - main
+      - infra/runner-toevoegen
+  pull_request:
+    branches:
+      - main
 
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+jobs:
+  test:
+    runs-on: windows-latest  # MAUI tests werken meestal beter op Windows
+    steps:
+      - name: Haal de repository op
+        uses: actions/checkout@v4
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
-    <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-  </ItemGroup>
+      - name: Installeer .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'  # Pas aan indien nodig
 
-  <ItemGroup>
-    <ProjectReference Include="..\Grocery.Core\Grocery.Core.csproj" />
-  </ItemGroup>
+      # Alleen nodig als je platform-specifieke MAUI code buildt
+      - name: Installeer MAUI workloads
+        run: dotnet workload install maui-android
 
-  <ItemGroup>
-    <Using Include="NUnit.Framework" />
-  </ItemGroup>
+      - name: Herstel afhankelijkheden
+        run: dotnet restore OOSDD_GroceryApp_Sprint4_Studenten/TestCore/TestCore.csproj
 
-</Project>
+      - name: Bouw testproject
+        run: dotnet build OOSDD_GroceryApp_Sprint4_Studenten/TestCore/TestCore.csproj --configuration Debug
+
+      - name: Voer unit tests uit
+        run: dotnet test OOSDD_GroceryApp_Sprint4_Studenten/TestCore/TestCore.csproj --configuration Debug --no-build --verbosity normal
