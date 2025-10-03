@@ -21,16 +21,50 @@ namespace Grocery.App.ViewModels
             _boughtProductsService = boughtProductsService;
             Products = new(productService.GetAll());
         }
+        //nieuw: *****
+        //partial void OnSelectedProductChanged(Product? oldValue, Product newValue)
+        //{
+        //    // Check of er een product is geselecteerd
+        //    if (newValue == null)
+        //    {
+        //        // Maak de lijst leeg als er geen product geselecteerd is
+        //        BoughtProductsList.Clear();
+        //        return;
+        //    }
 
+        //    // Haal alle BoughtProducts op voor het geselecteerde product
+        //    var boughtProducts = _boughtProductsService.Get(newValue.Id);
+
+        //    // Leeg de huidige lijst
+        //    BoughtProductsList.Clear();
+
+        //    // Voeg alle nieuwe items toe aan de ObservableCollection
+        //    foreach (var item in boughtProducts)
+        //    {
+        //        BoughtProductsList.Add(item);
+        //    }
+        //}
         partial void OnSelectedProductChanged(Product? oldValue, Product newValue)
         {
-            //Zorg dat de lijst BoughtProductsList met de gegevens die passen bij het geselecteerde product. 
-        }
+            if (newValue == null)
+            {
+                BoughtProductsList.Clear();
+                return;
+            }
 
+            var boughtProducts = _boughtProductsService.Get(newValue.Id);
+
+            BoughtProductsList.Clear();
+            foreach (var item in boughtProducts)
+            {
+                BoughtProductsList.Add(item);
+            }
+        }
         [RelayCommand]
         public void NewSelectedProduct(Product product)
         {
             SelectedProduct = product;
         }
+    
     }
 }
