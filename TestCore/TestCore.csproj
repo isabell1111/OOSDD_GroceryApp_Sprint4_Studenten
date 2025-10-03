@@ -4,32 +4,32 @@ on:
   push:
     branches:
       - main
-      
+      - infra/runner-toevoegen
   pull_request:
     branches:
       - main
 
 jobs:
   test:
-    runs-on: windows-latest  # MAUI tests werken meestal beter op Windows
+    runs-on: windows-latest  # MAUI tests werken meestal stabieler op Windows
     steps:
+      # 1. Haal de repository op
       - name: Haal de repository op
         uses: actions/checkout@v4
 
+      # 2. Toon de directory structuur voor debugging
+      - name: Toon directory structuur
+        run: dir /s
+
+      # 3. Installeer .NET SDK
       - name: Installeer .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'  # Pas aan indien nodig
 
-      # Alleen nodig als je platform-specifieke MAUI code buildt
+      # 4. Installeer MAUI workloads (alleen nodig voor platform-specifieke builds)
       - name: Installeer MAUI workloads
         run: dotnet workload install maui-android
 
+      # 5. Herstel afhankelijkheden
       - name: Herstel afhankelijkheden
-        run: dotnet restore OOSDD_GroceryApp_Sprint4_Studenten/TestCore/TestCore.csproj
-
-      - name: Bouw testproject
-        run: dotnet build OOSDD_GroceryApp_Sprint4_Studenten/TestCore/TestCore.csproj --configuration Debug
-
-      - name: Voer unit tests uit
-        run: dotnet test OOSDD_GroceryApp_Sprint4_Studenten/TestCore/TestCore.csproj --configuration Debug --no-build --verbosity normal
