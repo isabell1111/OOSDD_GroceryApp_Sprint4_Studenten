@@ -1,5 +1,5 @@
 name: MAUI Unit Tests
-
+ 
 on:
   push:
     branches:
@@ -8,33 +8,27 @@ on:
   pull_request:
     branches:
       - main
-
+ 
 jobs:
   test:
-    runs-on: windows-latest   # MAUI werkt stabieler op Windows
+    runs-on: ubuntu-latest  # Of windows-latest/macOS-latest als specifiek platform nodig is
     steps:
-      # 1. Haal de repository op
-      - name: Checkout repository
+      - name: Haal de repository op
         uses: actions/checkout@v4
-
-      # 2. Installeer .NET SDK
-      - name: Setup .NET SDK
+ 
+      - name: Installeer .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
-
-      # 3. Installeer MAUI workloads (optioneel, alleen nodig voor platform builds)
-      - name: Install MAUI workloads
+          dotnet-version: '8.0.x'  # Gebruik de juiste versie voor MAUI
+ 
+      - name: Installeer MAUI workloads
         run: dotnet workload install maui-android
-
-      # 4. Restore dependencies van testproject
-      - name: Restore dependencies
-        run: dotnet restore TestCore/TestCore.csproj
-
-      # 5. Build testproject in Debug (stabiel voor tests)
-      - name: Build test project
-        run: dotnet build TestCore/TestCore.csproj --configuration Debug
-
-      # 6. Run unit tests
-      - name: Run unit tests
-        run: dotnet test TestCore/TestCore.csproj --configuration Debug --no-build --verbosity normal
+ 
+      - name: Herstel afhankelijkheden
+        run: dotnet restore
+ 
+      - name: Bouw de applicatie
+        run: dotnet build --configuration Release --no-restore
+ 
+      - name: Voer unit tests uit
+        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
