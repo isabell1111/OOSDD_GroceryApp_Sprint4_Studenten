@@ -1,44 +1,23 @@
-name: MAUI Unit Tests
+<Project Sdk="Microsoft.NET.Sdk">
 
-on:
-  push:
-    branches:
-      - main
-      - infra/runner-toevoegen
-  pull_request:
-    branches:
-      - main
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
-jobs:
-  test:
-    runs-on: windows-latest
-    steps:
-      # 1. Haal de repository op
-      - name: Haal de repository op
-        uses: actions/checkout@v4
+  <ItemGroup>
+    <!-- Test framework -->
+    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
+  </ItemGroup>
 
-      # 2. Toon directory structuur (optioneel, voor debug)
-      - name: Toon directory structuur
-        run: dir /s
+  <ItemGroup>
+    <!-- Als je testproject afhankelijk is van je hoofdproject, voeg het project dan toe -->
+    <ProjectReference Include="..\OOSDD_GroceryApp_Sprint4_Studenten\OOSDD_GroceryApp_Sprint4_Studenten.csproj" />
+  </ItemGroup>
 
-      # 3. Installeer .NET SDK
-      - name: Installeer .NET SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
-
-      # 4. Installeer MAUI workloads (optioneel)
-      - name: Installeer MAUI workloads
-        run: dotnet workload install maui-android
-
-      # 5. Herstel afhankelijkheden
-      - name: Herstel afhankelijkheden
-        run: dotnet restore TestCore/TestCore.csproj
-
-      # 6. Bouw het testproject
-      - name: Bouw testproject
-        run: dotnet build TestCore/TestCore.csproj --configuration Debug
-
-      # 7. Voer unit tests uit
-      - name: Voer unit tests uit
-        run: dotnet test TestCore/TestCore.csproj --configuration Debug --no-build --verbosity normal
+</Project>
