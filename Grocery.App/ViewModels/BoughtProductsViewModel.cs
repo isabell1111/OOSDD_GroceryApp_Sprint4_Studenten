@@ -21,7 +21,7 @@ namespace Grocery.App.ViewModels
             _boughtProductsService = boughtProductsService;
             Products = new(productService.GetAll());
         }
-        //nieuw:
+        //nieuw: *****
         partial void OnSelectedProductChanged(Product? oldValue, Product newValue)
         {
             // Check of er een product is geselecteerd

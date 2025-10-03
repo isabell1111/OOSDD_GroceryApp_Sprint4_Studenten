@@ -7,4 +7,5 @@ namespace Grocery.Core.Interfaces.Services
     {
         public List<BoughtProducts> Get(int? productId);
     }
+
 }
