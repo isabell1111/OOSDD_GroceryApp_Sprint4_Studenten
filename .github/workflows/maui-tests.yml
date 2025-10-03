@@ -3,8 +3,8 @@ name: MAUI Unit Tests
 on:
   push:
     branches:
-      - main
-      - infra/runner-toevoegen
+      - develop
+      
   pull_request:
     branches:
       - main
